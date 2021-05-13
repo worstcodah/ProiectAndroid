@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "279224688930",
+    "firebase_url": "https://tema-3-c445d-default-rtdb.firebaseio.com",
+    "project_id": "tema-3-c445d",
+    "storage_bucket": "tema-3-c445d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279224688930:android:3aaf4ed4a921e5d75b857b",
+        "android_client_info": {
+          "package_name": "com.example.tema3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279224688930-m4joq8enfktjfjn6s5mv4poqv6r1933s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG9MoJ8DPDqgu-66fkHucBzczzoxzgwPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279224688930-m4joq8enfktjfjn6s5mv4poqv6r1933s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

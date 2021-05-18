@@ -10,4 +10,8 @@
     <string name="register_label">Register</string>
     <string name="dashboard_label">Dashboard</string>
     <string name="dashboard_button_label">Logout</string>
+    <string name="change_password_label">Change Password</string>
+    <string name="forgot_password_question">Forgot password?</string>
+    <string name="forgot_password_label">Reset password</string>
+
 </resources>

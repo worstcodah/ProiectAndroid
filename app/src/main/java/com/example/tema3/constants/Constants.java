@@ -13,4 +13,6 @@ public class Constants {
     public final static String failedLoginMessage = "Login failed";
     public final static String succesfulLoginMessage = "Login succesful";
     public final static String passwordLengthErrorMessage = "Password's length should be > 4";
+    public final static String succesfulChangePasswordMessage = "Password has been succesfully changed !";
+    public final static String failedChangePasswordMessage = "Password couldn't be changed !";
 }

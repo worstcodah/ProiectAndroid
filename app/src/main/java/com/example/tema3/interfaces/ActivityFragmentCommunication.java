@@ -4,4 +4,6 @@ public interface ActivityFragmentCommunication {
     public void openLoginFragment();
     public void openSignUpFragment();
     public void openDashboardFragment();
+    public void openChangePasswordFragment();
+
 }

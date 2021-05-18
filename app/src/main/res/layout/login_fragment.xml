@@ -107,4 +107,30 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/forgot_password_margin_top"
+        android:layout_marginBottom="@dimen/forgot_password_margin_bottom"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password_question"
+            android:textColor="@color/white"
+            android:textSize="@dimen/forgot_password_text_size" />
+
+        <TextView
+            android:id="@+id/forgot_password_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/forgot_password_margin_left"
+            android:text="@string/forgot_password_label"
+            android:textColor="@color/white"
+            android:textSize="@dimen/forgot_password_text_size"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 </LinearLayout>

@@ -54,7 +54,7 @@
             android:layout_height="@dimen/edit_text_height"
             android:background="@drawable/rectangular_field"
             android:hint="@string/password_hint"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             android:paddingVertical="@dimen/edit_text_vertical_padding"
             android:paddingLeft="@dimen/edit_text_left_padding"
             android:textColor="@color/black" />
@@ -70,6 +70,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
         android:layout_marginTop="@dimen/login_button_margin_top"
@@ -95,6 +96,7 @@
             android:textSize="@dimen/register_text_size" />
 
         <TextView
+            android:id="@+id/sign_up_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/register_label_margin_left"
@@ -104,6 +106,5 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
 
 </LinearLayout>

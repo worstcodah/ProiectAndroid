@@ -1,24 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/dashboard_general_padding"
+    tools:context=".fragments.DashboardFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dashboard_label"
-        android:textColor="@color/dark_blue"
-        android:textSize="@dimen/dashboard_label_text_size" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/dashboard_logout_button"
-        android:layout_width="@dimen/dashboard_button_width"
-        android:layout_height="@dimen/dashboard_button_height"
-        android:layout_marginTop="@dimen/dashboard_button_margin_top"
-        android:text="@string/dashboard_button_label"
-        android:textAllCaps="false"
-        android:textSize="@dimen/dashboard_button_text_size" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_regular"
+            android:text="@string/dashboard_label"
+            android:textColor="@color/dark_blue"
+            android:textSize="@dimen/dashboard_label_text_size"
+            android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_regular"
+            android:text="@string/dashboard_menu_label"
+            android:textColor="@color/dark_blue"
+            android:textSize="@dimen/dashboard_description_text_size"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/topics_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_view_height"
+            android:layout_marginTop="@dimen/card_margin_top"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/card_corner_radius">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_orange"
+                android:padding="@dimen/card_padding">
+
+                <TextView
+                    android:id="@+id/first_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/card_text_margin_left"
+                    android:layout_marginTop="@dimen/card_text_margin_top"
+                    android:text="@string/see_topics_label"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/card_label_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/first_card"
+                    android:layout_marginTop="@dimen/card_description_margin_top"
+                    android:text="@string/see_topics_description"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/card_description_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/card_image_width"
+                    android:layout_height="@dimen/card_image_height"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/card_image_margin_top"
+                    android:maxHeight="@dimen/card_image_max_height"
+                    android:src="@drawable/topic"
+
+                    />
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/manage_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_view_height"
+            android:layout_marginTop="@dimen/card_margin_top"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/card_corner_radius">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_red"
+                android:padding="@dimen/card_padding">
+
+                <TextView
+                    android:id="@+id/second_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/card_text_margin_left"
+                    android:layout_marginTop="@dimen/card_text_margin_top"
+                    android:text="@string/manage_topics_label"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/card_label_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/second_card"
+                    android:layout_marginTop="@dimen/card_description_margin_top"
+                    android:text="@string/manage_topics_description"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/card_description_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/card_image_width"
+                    android:layout_height="@dimen/card_image_height"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/card_image_margin_top"
+                    android:maxHeight="@dimen/card_image_max_height"
+                    android:src="@drawable/manage"
+
+                    />
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/logout_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_view_height"
+            android:layout_marginTop="@dimen/card_margin_top"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/card_corner_radius">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_green"
+                android:padding="@dimen/card_padding">
+
+                <TextView
+                    android:id="@+id/third_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/card_text_margin_left"
+                    android:layout_marginTop="@dimen/card_text_margin_top"
+                    android:text="@string/logout_label"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/card_label_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/third_card"
+                    android:layout_marginTop="@dimen/card_description_margin_top"
+                    android:text="@string/logout_description"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/card_description_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/card_image_width"
+                    android:layout_height="@dimen/card_image_height"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/card_image_margin_top"
+                    android:maxHeight="@dimen/card_image_max_height"
+                    android:src="@drawable/logout"
+
+                    />
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </LinearLayout>

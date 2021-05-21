@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.tema3.R;
 import com.example.tema3.constants.Constants;
-import com.example.tema3.interfaces.ActivityFragmentCommunication;
+import com.example.tema3.interfaces.AuthenticationActivityFragmentCommunication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,13 +32,13 @@ public class SignUpFragment extends Fragment {
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private View view;
-    private ActivityFragmentCommunication activityFragmentCommunication;
+    private AuthenticationActivityFragmentCommunication authenticationActivityFragmentCommunication;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof ActivityFragmentCommunication) {
-            activityFragmentCommunication = (ActivityFragmentCommunication) context;
+        if (context instanceof AuthenticationActivityFragmentCommunication) {
+            authenticationActivityFragmentCommunication = (AuthenticationActivityFragmentCommunication) context;
         }
     }
 
@@ -53,18 +53,8 @@ public class SignUpFragment extends Fragment {
         signUpButton = view.findViewById(R.id.sign_up_button);
         progressDialog = new ProgressDialog(this.getActivity());
         signInTV = view.findViewById(R.id.sign_in_tv);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
-        signInTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activityFragmentCommunication.openSignUpFragment();
-            }
-        });
+        signUpButton.setOnClickListener(v -> register());
+        signInTV.setOnClickListener(v -> authenticationActivityFragmentCommunication.openLoginFragment());
 
         return view;
     }
@@ -74,37 +64,37 @@ public class SignUpFragment extends Fragment {
         String password = passwordEt.getText().toString();
         String confirmPassword = confirmPasswordEt.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            emailEt.setError(Constants.emailErrorMessage);
+            emailEt.setError(Constants.EMAIL_ERROR_MESSAGE);
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            passwordEt.setError(Constants.passwordErrorMessage);
+            passwordEt.setError(Constants.PASSWORD_ERROR_MESSAGE);
             return;
         }
         if (TextUtils.isEmpty(confirmPassword)) {
-            passwordEt.setError(Constants.confirmPasswordErrorMessage);
+            passwordEt.setError(Constants.CONFIRM_PASSWORD_ERROR_MESSAGE);
             return;
         }
         if (!password.equals(confirmPassword)) {
-            confirmPasswordEt.setError(Constants.passwordsNotMatchingErrorMessage);
+            confirmPasswordEt.setError(Constants.PASSWORDS_NOT_MATCHING_ERROR_MESSAGE);
         }
         if (!isValidEmail(email)) {
-            emailEt.setError(Constants.invalidEmailErrorMessage);
+            emailEt.setError(Constants.INVALID_EMAIL_ERROR_MESSAGE);
         }
         if (password.length() < 4) {
-            passwordEt.setError(Constants.passwordLengthErrorMessage);
+            passwordEt.setError(Constants.PASSWORD_LENGTH_ERROR_MESSAGE);
         }
-        progressDialog.setMessage(Constants.progressDialogMessage);
+        progressDialog.setMessage(Constants.PROGRESS_DIALOG_MESSAGE);
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this.getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getActivity(), Constants.succesfulRegisterMessage, Toast.LENGTH_SHORT).show();
-                    activityFragmentCommunication.openDashboardFragment();
+                    Toast.makeText(getActivity(), Constants.SUCCESFUL_REGISTER_MESSAGE, Toast.LENGTH_SHORT).show();
+                    authenticationActivityFragmentCommunication.openDashboardFragment();
                 } else {
-                    Toast.makeText(getActivity(), Constants.failedRegisterMessage, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), Constants.FAILED_REGISTER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 
                 }
                 progressDialog.dismiss();

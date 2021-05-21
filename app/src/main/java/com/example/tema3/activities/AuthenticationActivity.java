@@ -7,18 +7,18 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.example.tema3.R;
-import com.example.tema3.fragments.ChangePasswordFragment;
+import com.example.tema3.fragments.ResetPasswordFragment;
 import com.example.tema3.fragments.DashboardFragment;
 import com.example.tema3.fragments.LoginFragment;
 import com.example.tema3.fragments.SignUpFragment;
-import com.example.tema3.interfaces.ActivityFragmentCommunication;
+import com.example.tema3.interfaces.AuthenticationActivityFragmentCommunication;
 
-public class MainActivity extends AppCompatActivity implements ActivityFragmentCommunication {
+public class AuthenticationActivity extends AppCompatActivity implements AuthenticationActivityFragmentCommunication {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         openLoginFragment();
     }
 
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
     public void openChangePasswordFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        String tag = ChangePasswordFragment.class.getName();
-        ChangePasswordFragment changePassword = new ChangePasswordFragment();
+        String tag = ResetPasswordFragment.class.getName();
+        ResetPasswordFragment changePassword = new ResetPasswordFragment();
         FragmentTransaction addTransaction = transaction.replace(
                 R.id.frame_layout, changePassword, tag
         );

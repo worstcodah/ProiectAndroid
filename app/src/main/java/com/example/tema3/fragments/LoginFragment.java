@@ -22,6 +22,7 @@ import com.example.tema3.R;
 import com.example.tema3.activities.DashboardActivity;
 import com.example.tema3.constants.Constants;
 import com.example.tema3.interfaces.AuthenticationActivityFragmentCommunication;
+import com.example.tema3.user.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -86,7 +87,8 @@ public class LoginFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getActivity(), Constants.SUCCESFUL_LOGIN_MESSAGE, Toast.LENGTH_SHORT).show();
-                    openDashboardActivity();
+                    CurrentUser.currentUserEmail = email;
+                    authenticationActivityFragmentCommunication.openDashboardActivity();
                 } else {
                     Toast.makeText(getActivity(), Constants.FAILED_LOGIN_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
@@ -95,10 +97,6 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void openDashboardActivity() {
-        Intent myIntent = new Intent(getActivity(), DashboardActivity.class);
-        this.startActivity(myIntent);
-    }
 
     private Boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());

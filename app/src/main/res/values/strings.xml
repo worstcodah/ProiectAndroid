@@ -22,5 +22,7 @@
     <string name="logout_label">Logout</string>
     <string name="logout_description">End the current session</string>
     <string name="dashboard_activity_name">DashboardActivity</string>
+    <string name="topics_activity_name">TopicsActivity</string>
+    <string name="management_activity_name">ManagementActivity</string>
 
 </resources>

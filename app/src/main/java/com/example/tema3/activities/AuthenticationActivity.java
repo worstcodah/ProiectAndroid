@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.tema3.R;
@@ -46,17 +47,6 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
         addTransaction.commit();
     }
 
-    @Override
-    public void openDashboardFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        String tag = DashboardFragment.class.getName();
-        DashboardFragment dashboardFragment = new DashboardFragment();
-        FragmentTransaction addTransaction = transaction.replace(
-                R.id.frame_layout, dashboardFragment, tag
-        );
-        addTransaction.commit();
-    }
 
     @Override
     public void openChangePasswordFragment() {
@@ -68,5 +58,11 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
                 R.id.frame_layout, changePassword, tag
         );
         addTransaction.commit();
+    }
+
+    @Override
+    public void openDashboardActivity() {
+        Intent myIntent = new Intent(this, DashboardActivity.class);
+        this.startActivity(myIntent);
     }
 }

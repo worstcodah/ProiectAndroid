@@ -45,4 +45,6 @@
     <dimen name="card_label_text_size">30sp</dimen>
     <dimen name="card_description_text_size">15sp</dimen>
     <dimen name="card_image_margin_top">10dp</dimen>
+    <dimen name="user_email_tv_margin_left">220dp</dimen>
+    <dimen name="user_email_tv_width">150dp</dimen>
 </resources>

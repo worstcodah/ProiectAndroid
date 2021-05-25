@@ -92,7 +92,7 @@ public class SignUpFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getActivity(), Constants.SUCCESFUL_REGISTER_MESSAGE, Toast.LENGTH_SHORT).show();
-                    authenticationActivityFragmentCommunication.openDashboardFragment();
+                    authenticationActivityFragmentCommunication.openDashboardActivity();
                 } else {
                     Toast.makeText(getActivity(), Constants.FAILED_REGISTER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 

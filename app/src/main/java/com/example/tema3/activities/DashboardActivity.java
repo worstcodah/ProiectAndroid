@@ -1,5 +1,6 @@
 package com.example.tema3.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,5 +30,17 @@ public class DashboardActivity extends AppCompatActivity implements DashboardAct
                 R.id.dashboard_frame_layout, dashboardFragment, tag
         );
         addTransaction.commit();
+    }
+
+    @Override
+    public void openTopicsActivity() {
+        Intent myIntent = new Intent(this, TopicsActivity.class);
+        this.startActivity(myIntent);
+    }
+
+    @Override
+    public void openManagementActivity() {
+        Intent myIntent = new Intent(this, ManagementActivity.class);
+        this.startActivity(myIntent);
     }
 }

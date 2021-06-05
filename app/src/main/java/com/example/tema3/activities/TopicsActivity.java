@@ -8,7 +8,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tema3.R;
 import com.example.tema3.fragments.SeeTopicsFragment;
+import com.example.tema3.fragments.SelectedTopicFragment;
 import com.example.tema3.interfaces.TopicsActivityFragmentCommunication;
+import com.example.tema3.models.Topic;
 
 public class TopicsActivity extends AppCompatActivity implements TopicsActivityFragmentCommunication {
     @Override
@@ -26,6 +28,18 @@ public class TopicsActivity extends AppCompatActivity implements TopicsActivityF
         SeeTopicsFragment seeTopicsFragment = new SeeTopicsFragment();
         FragmentTransaction addTransaction = transaction.add(
                 R.id.topics_frame_layout, seeTopicsFragment, tag
+        );
+        addTransaction.commit();
+    }
+
+    @Override
+    public void openSelectedTopic(Topic topic) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        String tag = SelectedTopicFragment.class.getName();
+        SelectedTopicFragment selectedTopicFragment = new SelectedTopicFragment();
+        FragmentTransaction addTransaction = transaction.replace(
+                R.id.topics_frame_layout, selectedTopicFragment, tag
         );
         addTransaction.commit();
     }

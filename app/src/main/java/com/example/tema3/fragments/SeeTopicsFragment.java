@@ -1,5 +1,6 @@
 package com.example.tema3.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tema3.R;
 import com.example.tema3.adapters.MyAdapter;
+import com.example.tema3.interfaces.OnTopicClickListener;
+import com.example.tema3.interfaces.TopicsActivityFragmentCommunication;
 import com.example.tema3.models.Element;
 import com.example.tema3.models.Topic;
 import com.google.firebase.database.DataSnapshot;
@@ -23,11 +26,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class SeeTopicsFragment extends Fragment {
+public class SeeTopicsFragment extends Fragment implements OnTopicClickListener {
     private View view;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private ArrayList<Element> elementList;
+    private TopicsActivityFragmentCommunication topicsActivityFragmentCommunication;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof TopicsActivityFragmentCommunication) {
+            topicsActivityFragmentCommunication = (TopicsActivityFragmentCommunication) context;
+        }
+    }
 
     @Nullable
     @Override
@@ -38,9 +50,14 @@ public class SeeTopicsFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.topic_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(new MyAdapter(elementList));
+        recyclerView.setAdapter(new MyAdapter(elementList, this));
         ArrayList<Topic> topicList = new ArrayList<>();
         databaseReference.setValue(topicList);
         return view;
+    }
+
+    @Override
+    public void openSelectedTopic(Topic topic) {
+        topicsActivityFragmentCommunication.openSelectedTopic(topic);
     }
 }

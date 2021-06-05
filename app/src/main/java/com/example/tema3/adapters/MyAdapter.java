@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tema3.R;
+import com.example.tema3.interfaces.OnTopicClickListener;
 import com.example.tema3.models.Element;
 import com.example.tema3.models.Topic;
 
@@ -17,8 +18,9 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<Element> elementList;
+    OnTopicClickListener onTopicClickListener;
 
-    public MyAdapter(ArrayList<Element> elementList) {
+    public MyAdapter(ArrayList<Element> elementList, OnTopicClickListener onTopicClickListener) {
         this.elementList = elementList;
     }
 
@@ -61,7 +63,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void bind(Topic topic) {
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onTopicClickListener.openSelectedTopic(topic);
+                }
+            });
         }
     }
 }

@@ -32,6 +32,7 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
         FragmentTransaction addTransaction = transaction.add(
                 R.id.frame_layout, loginFragment, tag
         );
+        addTransaction.addToBackStack(null);
         addTransaction.commit();
     }
 
@@ -41,10 +42,11 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String tag = SignUpFragment.class.getName();
         SignUpFragment signUpFragment = new SignUpFragment();
-        FragmentTransaction addTransaction = transaction.add(
+        FragmentTransaction replaceTransaction = transaction.replace(
                 R.id.frame_layout, signUpFragment, tag
         );
-        addTransaction.commit();
+        replaceTransaction.addToBackStack(null);
+        replaceTransaction.commit();
     }
 
 
@@ -54,10 +56,11 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String tag = ResetPasswordFragment.class.getName();
         ResetPasswordFragment changePassword = new ResetPasswordFragment();
-        FragmentTransaction addTransaction = transaction.replace(
+        FragmentTransaction replaceTransaction = transaction.replace(
                 R.id.frame_layout, changePassword, tag
         );
-        addTransaction.commit();
+        replaceTransaction.addToBackStack(null);
+        replaceTransaction.commit();
     }
 
     @Override

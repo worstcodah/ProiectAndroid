@@ -6,6 +6,8 @@ public class Topic extends Element {
     private String title;
     private String description;
     private String authorEmail;
+    private boolean isSelected;
+
     private ArrayList<Comment> commentList;
 
     public Topic(String title, String description, String authorEmail, ArrayList<Comment> commentList) {
@@ -13,6 +15,12 @@ public class Topic extends Element {
         this.description = description;
         this.authorEmail = authorEmail;
         this.commentList = commentList;
+    }
+
+    public Topic(String title, String description, String authorEmail) {
+        this.title = title;
+        this.description = description;
+        this.authorEmail = authorEmail;
     }
 
     public String getTitle() {
@@ -37,5 +45,17 @@ public class Topic extends Element {
 
     public void setAuthorEmail(String authorEmail) {
         this.authorEmail = authorEmail;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public ArrayList<Comment> getCommentList() {
+        return commentList;
     }
 }

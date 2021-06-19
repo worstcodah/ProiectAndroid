@@ -2,7 +2,7 @@ package com.example.tema3.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -19,13 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.tema3.R;
-import com.example.tema3.activities.DashboardActivity;
 import com.example.tema3.constants.Constants;
 import com.example.tema3.interfaces.AuthenticationActivityFragmentCommunication;
-import com.example.tema3.user.CurrentUser;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
@@ -82,18 +77,18 @@ public class LoginFragment extends Fragment {
         progressDialog.setMessage(Constants.PROGRESS_DIALOG_MESSAGE);
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this.getActivity(), new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getActivity(), Constants.SUCCESFUL_LOGIN_MESSAGE, Toast.LENGTH_SHORT).show();
-                    CurrentUser.currentUserEmail = email;
-                    authenticationActivityFragmentCommunication.openDashboardActivity();
-                } else {
-                    Toast.makeText(getActivity(), Constants.FAILED_LOGIN_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this.getActivity(), task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getActivity(), Constants.SUCCESSFUL_LOGIN_MESSAGE, Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE);
+                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                sharedPreferencesEditor.putString("email", firebaseAuth.getCurrentUser().getEmail());
+                sharedPreferencesEditor.apply();
+                authenticationActivityFragmentCommunication.openDashboardActivity();
+            } else {
+                Toast.makeText(getActivity(), Constants.FAILED_LOGIN_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
+            progressDialog.dismiss();
         });
     }
 

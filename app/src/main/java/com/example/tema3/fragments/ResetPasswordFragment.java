@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ResetPasswordFragment extends Fragment {
     private EditText emailEt;
     private Button changePasswordButton;
+    private TextView backToLoginTv;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private View view;
@@ -43,9 +45,11 @@ public class ResetPasswordFragment extends Fragment {
         view = inflater.inflate(R.layout.reset_password_fragment, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
         emailEt = view.findViewById(R.id.email);
+        backToLoginTv = view.findViewById(R.id.reset_back_to_login_tv);
         changePasswordButton = view.findViewById(R.id.change_password_button);
         progressDialog = new ProgressDialog(this.getActivity());
         changePasswordButton.setOnClickListener(v -> changePassword());
+        backToLoginTv.setOnClickListener(v -> authenticationActivityFragmentCommunication.openLoginFragment());
 
         return view;
     }
@@ -66,7 +70,7 @@ public class ResetPasswordFragment extends Fragment {
         progressDialog.setCanceledOnTouchOutside(false);
         firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(this.getActivity(), task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(getActivity(), Constants.SUCCESFUL_CHANGE_PASSWORD_MESSAGE, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), Constants.SUCCESSFUL_CHANGE_PASSWORD_MESSAGE, Toast.LENGTH_SHORT).show();
                 authenticationActivityFragmentCommunication.openLoginFragment();
             } else {
                 Toast.makeText(getActivity(), Constants.FAILED_CHANGE_PASSWORD_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();

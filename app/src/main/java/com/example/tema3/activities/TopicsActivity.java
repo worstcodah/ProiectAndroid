@@ -1,5 +1,6 @@
 package com.example.tema3.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tema3.R;
+import com.example.tema3.constants.Constants;
 import com.example.tema3.fragments.SeeTopicsFragment;
 import com.example.tema3.fragments.SelectedTopicFragment;
 import com.example.tema3.interfaces.TopicsActivityFragmentCommunication;
@@ -37,10 +39,12 @@ public class TopicsActivity extends AppCompatActivity implements TopicsActivityF
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String tag = SelectedTopicFragment.class.getName();
-        SelectedTopicFragment selectedTopicFragment = new SelectedTopicFragment();
-        FragmentTransaction addTransaction = transaction.replace(
+        boolean isTopicOwner = getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null)
+                .equals(topic.getAuthorEmail());
+        SelectedTopicFragment selectedTopicFragment = new SelectedTopicFragment(topic, isTopicOwner);
+        FragmentTransaction replaceTransaction = transaction.replace(
                 R.id.topics_frame_layout, selectedTopicFragment, tag
         );
-        addTransaction.commit();
+        replaceTransaction.commit();
     }
 }

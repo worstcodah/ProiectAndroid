@@ -2,6 +2,7 @@ package com.example.tema3.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.tema3.R;
 import com.example.tema3.activities.AuthenticationActivity;
+import com.example.tema3.constants.Constants;
 import com.example.tema3.interfaces.DashboardActivityFragmentCommunication;
-import com.example.tema3.user.CurrentUser;
 
 public class DashboardFragment extends Fragment {
     private View view;
@@ -42,7 +43,8 @@ public class DashboardFragment extends Fragment {
         topicsCard = view.findViewById(R.id.topics_card);
         manageCard = view.findViewById(R.id.manage_card);
         userEmailTv = view.findViewById(R.id.user_email_tv);
-        userEmailTv.setText("Hello, " + CurrentUser.currentUserEmail);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE);
+        userEmailTv.setText("Hello, " + sharedPreferences.getString("email", null));
         logoutCard.setOnClickListener(v -> openAuthenticationActivity());
         topicsCard.setOnClickListener(v -> dashboardActivityFragmentCommunication.openTopicsActivity());
         manageCard.setOnClickListener(v -> dashboardActivityFragmentCommunication.openManagementActivity());

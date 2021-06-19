@@ -81,7 +81,7 @@ public class SignUpFragment extends Fragment {
         if (!isValidEmail(email)) {
             emailEt.setError(Constants.INVALID_EMAIL_ERROR_MESSAGE);
         }
-        if (password.length() < 4) {
+        if (password.length() < 6) {
             passwordEt.setError(Constants.PASSWORD_LENGTH_ERROR_MESSAGE);
         }
         progressDialog.setMessage(Constants.PROGRESS_DIALOG_MESSAGE);
@@ -91,8 +91,8 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getActivity(), Constants.SUCCESFUL_REGISTER_MESSAGE, Toast.LENGTH_SHORT).show();
-                    authenticationActivityFragmentCommunication.openDashboardActivity();
+                    Toast.makeText(getActivity(), Constants.SUCCESSFUL_REGISTER_MESSAGE, Toast.LENGTH_SHORT).show();
+                    authenticationActivityFragmentCommunication.openLoginFragment();
                 } else {
                     Toast.makeText(getActivity(), Constants.FAILED_REGISTER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 

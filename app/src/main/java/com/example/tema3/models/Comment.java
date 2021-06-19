@@ -3,6 +3,17 @@ package com.example.tema3.models;
 public class Comment extends Element {
     private String content;
     private String authorEmail;
+    private boolean isSolution;
+    private boolean isDefault;
+    private String key;
+
+
+    public Comment(String content, String authorEmail, boolean isSolution, boolean isDefault) {
+        this.content = content;
+        this.authorEmail = authorEmail;
+        this.isSolution = isSolution;
+        this.isDefault = isDefault;
+    }
 
     public String getContent() {
         return content;
@@ -18,5 +29,25 @@ public class Comment extends Element {
 
     public void setAuthorEmail(String authorEmail) {
         this.authorEmail = authorEmail;
+    }
+
+    public boolean isSolution() {
+        return isSolution;
+    }
+
+    public void setSolution(boolean solution) {
+        isSolution = solution;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

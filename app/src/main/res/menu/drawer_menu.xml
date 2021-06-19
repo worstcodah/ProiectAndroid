@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/options_item_title" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/see_personal_topics_item"
+            android:icon="@drawable/personal_topics"
+            android:title="@string/personal_topics_item_title" />
+        <item
+            android:id="@+id/add_topic_item"
+            android:icon="@drawable/add_topic"
+            android:title="@string/add_update_topic_item_title" />
+        <item
+            android:id="@+id/delete_topic_item"
+            android:icon="@drawable/delete_topic"
+            android:title="@string/delete_topics_item_title" />
+        <item
+            android:id="@+id/edit_topic_item"
+            android:icon="@drawable/edit_topic"
+            android:title="@string/edit_topic_item_title" />
+    </group>
+
+</menu>

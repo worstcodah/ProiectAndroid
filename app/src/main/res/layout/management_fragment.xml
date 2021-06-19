@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/goldenrod"
     tools:context=".fragments.ManagementFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_regular"
+            android:gravity="center"
+            android:text="@string/personal_topics_label"
+            android:textSize="@dimen/personal_topics_label_text_size" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/personal_topics_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/personal_topics_rv_margin_top" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,5 +24,32 @@
     <string name="dashboard_activity_name">DashboardActivity</string>
     <string name="topics_activity_name">TopicsActivity</string>
     <string name="management_activity_name">ManagementActivity</string>
+    <string name="topic_author_label">Author:</string>
+    <string name="topic_title_label">Title:</string>
+    <string name="topic_description_label">Description:</string>
+    <string name="comment_author_label">Comment Author:</string>
+    <string name="comment_content_label">Content:</string>
+    <string name="selected_topic_label">Selected topic info</string>
+    <string name="personal_topics_label">Personal Topics</string>
+    <string name="all_topics_label">All Topics</string>
+    <string name="nav_header_label">Logged in as</string>
+    <string name="add_update_topic_item_title">Add topic</string>
+    <string name="delete_topics_item_title">Delete selected topics</string>
+    <string name="edit_topic_item_title">Edit selected topic</string>
+    <string name="options_item_title">Options</string>
+    <string name="navigation_drawer_open">Navigation drawer open</string>
+    <string name="navigation_drawer_close">Navigation drawer close</string>
+    <string name="add_topic_fragment_label">Add Topic Fragment</string>
+    <string name="edit_topic_fragment_label">Edit Topic Fragment</string>
+    <string name="topic_title_hint">Enter title...</string>
+    <string name="topic_description_hint">Enter description...</string>
+    <string name="add_topic_button_label">Add Topic</string>
+    <string name="personal_topics_item_title">See personal topics</string>
+    <string name="comment_item_delete_button_label">Delete</string>
+    <string name="back_to_login_fragment_label">Back to login</string>
+    <string name="add_comment_button_label">Add comment</string>
+    <string name="comment_content_hint">Leave a comment...</string>
+    <string name="update_topic_button_label">Update</string>
+    <string name="mark_solution_button_label">Mark solution</string>
 
 </resources>

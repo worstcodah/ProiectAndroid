@@ -16,4 +16,11 @@
     <color name="light_green">#4CAF50</color>
     <color name="ripple_color">#FFEB3B</color>
     <color name="lime">#8BC34A</color>
+    <color name="purple">#DA04F1</color>
+    <color name="brown">#6C4412</color>
+    <color name="dark_brown">#51340F</color>
+    <color name="medium_blue">#4B5FDD</color>
+    <color name="goldenrod">#DAA520</color>
+    <color name="sienna">#A0522D</color>
+    <color name="lavender">#E6E6FA</color>
 </resources>

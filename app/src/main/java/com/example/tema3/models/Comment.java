@@ -4,7 +4,7 @@ public class Comment extends Element {
     private String content;
     private String authorEmail;
     private boolean isSolution;
-    private boolean isDefault;
+    private final boolean isDefault;
     private String key;
 
 
@@ -25,10 +25,6 @@ public class Comment extends Element {
 
     public String getAuthorEmail() {
         return authorEmail;
-    }
-
-    public void setAuthorEmail(String authorEmail) {
-        this.authorEmail = authorEmail;
     }
 
     public boolean isSolution() {

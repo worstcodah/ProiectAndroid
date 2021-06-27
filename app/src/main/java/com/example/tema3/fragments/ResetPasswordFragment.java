@@ -24,11 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ResetPasswordFragment extends Fragment {
     private EditText emailEt;
-    private Button changePasswordButton;
-    private TextView backToLoginTv;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    private View view;
     private AuthenticationActivityFragmentCommunication authenticationActivityFragmentCommunication;
 
     @Override
@@ -42,15 +39,14 @@ public class ResetPasswordFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.reset_password_fragment, container, false);
+        View view = inflater.inflate(R.layout.reset_password_fragment, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
         emailEt = view.findViewById(R.id.email);
-        backToLoginTv = view.findViewById(R.id.reset_back_to_login_tv);
-        changePasswordButton = view.findViewById(R.id.change_password_button);
+        TextView backToLoginTv = view.findViewById(R.id.reset_back_to_login_tv);
+        Button changePasswordButton = view.findViewById(R.id.change_password_button);
         progressDialog = new ProgressDialog(this.getActivity());
         changePasswordButton.setOnClickListener(v -> changePassword());
         backToLoginTv.setOnClickListener(v -> authenticationActivityFragmentCommunication.openLoginFragment());
-
         return view;
     }
 
@@ -68,7 +64,7 @@ public class ResetPasswordFragment extends Fragment {
         progressDialog.setMessage(Constants.PROGRESS_DIALOG_MESSAGE);
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
-        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(this.getActivity(), task -> {
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(this.requireActivity(), task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(getActivity(), Constants.SUCCESSFUL_CHANGE_PASSWORD_MESSAGE, Toast.LENGTH_SHORT).show();
                 authenticationActivityFragmentCommunication.openLoginFragment();

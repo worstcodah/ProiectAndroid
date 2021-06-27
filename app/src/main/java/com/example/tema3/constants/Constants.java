@@ -41,5 +41,11 @@ public class Constants {
     public final static String SUCCESSFUL_DATABASE_COMMENT_DELETION_MESSAGE = "The comment has been successfully deleted from the DB!";
     public final static String SUCCESSFUL_TOPIC_UPDATE_MESSAGE = "The topic details have been successfully updated!";
     public final static String STRING_EMPTY = "";
+    public final static String DARKER_GRAY_COLOR_CODE = "#AAAAAA";
+    public final static String COMMENT_LIST_UPDATE_MESSAGE = "The comment list has been updated!";
+    public final static String DASHBOARD_HELLO_MESSAGE = "Hello, ";
     public final static int THREAD_SLEEP_VALUE = 1500;
+    public final static int ALARM_MILLISECONDS_INTERVAL_VALUE = 60000;
+    public final static int ALARM_TIMER_COUNTDOWN_INTERVAL = 1000;
+    public final static int ALARM_DURATION = 3000;
 }

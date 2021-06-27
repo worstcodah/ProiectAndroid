@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_bright"
-    android:orientation="vertical"
-    tools:context=".fragments.AddTopicFragment">
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/add_topic_fragment_label"
-        android:textSize="@dimen/add_topic_title_label_text_size" />
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_bright"
+        android:orientation="vertical"
+        tools:context=".fragments.AddTopicFragment">
 
-    <EditText
-        android:id="@+id/add_topic_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/add_topic_element_margin_top"
-        android:hint="@string/topic_title_hint" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/add_topic_fragment_label"
+            android:textSize="@dimen/add_topic_title_label_text_size" />
 
-    <EditText
-        android:id="@+id/add_topic_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/add_topic_element_margin_top"
-        android:hint="@string/topic_description_hint" />
+        <EditText
+            android:id="@+id/add_topic_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/add_topic_element_margin_top"
+            android:hint="@string/topic_title_hint" />
 
-    <Button
-        android:id="@+id/add_topic_button"
-        android:layout_width="@dimen/add_topic_button_width"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/add_topic_element_margin_top"
-        android:background="@drawable/button_shape"
-        android:text="@string/add_topic_button_label" />
+        <EditText
+            android:id="@+id/add_topic_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/add_topic_element_margin_top"
+            android:hint="@string/topic_description_hint" />
+
+        <Button
+            android:id="@+id/add_topic_button"
+            android:layout_width="@dimen/add_topic_button_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/add_topic_element_margin_top"
+            android:background="@drawable/button_shape"
+            android:text="@string/add_topic_button_label" />
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

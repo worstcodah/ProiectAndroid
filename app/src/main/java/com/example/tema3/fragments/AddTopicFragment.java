@@ -2,7 +2,6 @@ package com.example.tema3.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
+import java.util.Objects;
 
 public class AddTopicFragment extends Fragment {
-    private View view;
-    private Button addTopicButton;
     private EditText topicTitleEt;
     private EditText topicDescriptionEt;
     private DatabaseReference databaseReference;
@@ -37,12 +34,12 @@ public class AddTopicFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.add_topic_fragment, container, false);
+        View view = inflater.inflate(R.layout.add_topic_fragment, container, false);
         topicTitleEt = view.findViewById(R.id.add_topic_title);
         topicDescriptionEt = view.findViewById(R.id.add_topic_description);
-        addTopicButton = view.findViewById(R.id.add_topic_button);
+        Button addTopicButton = view.findViewById(R.id.add_topic_button);
         addTopicButton.setOnClickListener(v -> addTopic(new Topic(topicTitleEt.getText().toString(), topicDescriptionEt.getText().toString(),
-                getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null))));
+                requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null))));
         return view;
     }
 
@@ -58,8 +55,8 @@ public class AddTopicFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String userEmail = getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null);
-                        String title = dataSnapshot.child("title").getValue().toString();
+                        String userEmail = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null);
+                        String title = Objects.requireNonNull(dataSnapshot.child("title").getValue()).toString();
                         if (userEmail.equals(topic.getAuthorEmail()) && title.equals(topic.getTitle())) {
                             Toast.makeText(getContext(), Constants.TOPIC_ALREADY_EXISTS_MESSAGE, Toast.LENGTH_SHORT).show();
                         }
@@ -67,7 +64,8 @@ public class AddTopicFragment extends Fragment {
                 } else {
                     databaseReference.push().setValue(topic);
                     Toast.makeText(getContext(), Constants.SUCCESSFUL_ADDITION_MESSAGE, Toast.LENGTH_SHORT).show();
-
+                    topicTitleEt.setText(Constants.STRING_EMPTY);
+                    topicDescriptionEt.setText(Constants.STRING_EMPTY);
                 }
             }
 

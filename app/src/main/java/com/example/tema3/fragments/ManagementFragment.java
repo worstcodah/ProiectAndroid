@@ -27,14 +27,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ManagementFragment extends Fragment implements OnTopicClickListener {
-    private View view;
     private ArrayList<Element> elementList;
-    private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private ManagementActivityFragmentCommunication managementActivityFragmentCommunication;
     private MyAdapter myAdapter;
+
+
+    public ManagementFragment() {
+
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,8 +55,8 @@ public class ManagementFragment extends Fragment implements OnTopicClickListener
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.management_fragment, container, false);
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        View view = inflater.inflate(R.layout.management_fragment, container, false);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("topics");
         RecyclerView recyclerView = view.findViewById(R.id.personal_topics_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
@@ -64,15 +68,15 @@ public class ManagementFragment extends Fragment implements OnTopicClickListener
     }
 
     public void getFilteredTopics() {
-        String currentUserEmail = getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null);
+        String currentUserEmail = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 elementList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String title = dataSnapshot.child("title").getValue().toString();
-                    String description = dataSnapshot.child("description").getValue().toString();
-                    String authorEmail = dataSnapshot.child("authorEmail").getValue().toString();
+                    String title = Objects.requireNonNull(dataSnapshot.child("title").getValue()).toString();
+                    String description = Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString();
+                    String authorEmail = Objects.requireNonNull(dataSnapshot.child("authorEmail").getValue()).toString();
                     if (currentUserEmail.equals(authorEmail)) {
                         elementList.add(new Topic(title, description, authorEmail));
                     }
@@ -82,7 +86,7 @@ public class ManagementFragment extends Fragment implements OnTopicClickListener
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), Constants.CANCELLED_MANAGEMENT_REALTIME_CONNECTION_MESSAGE, Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), Constants.CANCELLED_MANAGEMENT_REALTIME_CONNECTION_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
     }

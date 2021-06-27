@@ -6,4 +6,6 @@ public interface TopicsActivityFragmentCommunication {
     void openTopicsFragment();
 
     void openSelectedTopic(Topic topic);
+
+    void openAddTopicFragment();
 }

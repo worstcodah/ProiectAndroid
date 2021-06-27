@@ -1,7 +1,6 @@
 package com.example.tema3.fragments;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,13 +28,10 @@ import com.example.tema3.R;
 import com.example.tema3.adapters.MyAdapter;
 import com.example.tema3.constants.Constants;
 import com.example.tema3.interfaces.OnCommentClickListener;
-import com.example.tema3.interfaces.OnTopicClickListener;
 import com.example.tema3.interfaces.OnUpdateClickListener;
 import com.example.tema3.models.Comment;
 import com.example.tema3.models.Element;
 import com.example.tema3.models.Topic;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,35 +46,48 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Stack;
 
 public class SelectedTopicFragment extends Fragment implements OnCommentClickListener, OnUpdateClickListener {
     private Topic selectedTopic;
-    private View view;
     private ArrayList<Element> elementList;
     private MyAdapter myAdapter;
     private DatabaseReference databaseReference;
-    private Button addCommentButton;
     private EditText commentContentEt;
     private RecyclerView recyclerView;
     private boolean isTopicOwner;
 
-    public SelectedTopicFragment(Topic selectedTopic, boolean isTopicOwner) {
-        this.selectedTopic = selectedTopic;
-        this.isTopicOwner = isTopicOwner;
+    public SelectedTopicFragment() {
+
+    }
+
+    public static SelectedTopicFragment newInstance(Topic topic, boolean isTopicOwner) {
+        SelectedTopicFragment selectedTopicFragment = new SelectedTopicFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isTopicOwner", isTopicOwner);
+        bundle.putParcelable("selectedTopic", topic);
+        selectedTopicFragment.setArguments(bundle);
+        return selectedTopicFragment;
     }
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.selected_topic_fragment, container, false);
+        View view = inflater.inflate(R.layout.selected_topic_fragment, container, false);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            selectedTopic = bundle.getParcelable("selectedTopic");
+            isTopicOwner = bundle.getBoolean("isTopicOwner");
+        }
         elementList = new ArrayList<>();
-        addCommentButton = view.findViewById(R.id.add_comment_button);
+        Button addCommentButton = view.findViewById(R.id.add_comment_button);
         commentContentEt = view.findViewById(R.id.comment_content_et);
         recyclerView = view.findViewById(R.id.selected_topic_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-        myAdapter = new MyAdapter(elementList, this, this::updateSelectedTopic);
+        myAdapter = new MyAdapter(elementList, this, this);
         myAdapter.setEditRights(isTopicOwner);
         recyclerView.setAdapter(myAdapter);
         elementList.add(selectedTopic);
@@ -88,7 +96,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
         } catch (InterruptedException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        addSpecificComments();
+        addTopicComments();
         addCommentButton.setOnClickListener(v -> addComment());
         return view;
     }
@@ -98,7 +106,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
         String commentContent = commentContentEt.getText().toString();
         if (!TextUtils.isEmpty(commentContent)) {
             Query query = databaseReference.orderByChild("title").equalTo(selectedTopic.getTitle());
-            String userEmail = getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).
+            String userEmail = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).
                     getString("email", null);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -107,9 +115,10 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             DataSnapshot authorEmail = dataSnapshot.child("authorEmail");
                             DataSnapshot commentList = dataSnapshot.child("commentList");
-                            if (authorEmail.getValue().toString().equals(selectedTopic.getAuthorEmail())) {
+                            if (Objects.requireNonNull(authorEmail.getValue()).toString().equals(selectedTopic.getAuthorEmail())) {
                                 Comment newComment = new Comment(commentContent, userEmail, false, false);
                                 String commentKey = commentList.getRef().push().getKey();
+                                assert commentKey != null;
                                 commentList.child(commentKey).getRef().setValue(newComment);
                                 newComment.setKey(commentKey);
                                 elementList.add(newComment);
@@ -124,7 +133,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
 
                 @Override
                 public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    Toast.makeText(getContext(), Constants.CANCELLED_COMMENT_ADDITION_MESSAGE, Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), Constants.CANCELLED_COMMENT_ADDITION_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -162,17 +171,33 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
         myAdapter.notifyDataSetChanged();
     }
 
-    private void addSpecificComments() {
+    private void deleteNonDefaultComments() {
+        Stack<Element> commentsToDelete = new Stack<>();
+        for (Element element : elementList) {
+            if (element instanceof Comment) {
+                Comment comment = (Comment) element;
+                if (!comment.isDefault()) {
+                    commentsToDelete.push(element);
+                }
+            }
+        }
+        while (!commentsToDelete.empty()) {
+            elementList.remove(commentsToDelete.pop());
+        }
+    }
+
+    private void addTopicComments() {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("topics");
         Query query = databaseReference.orderByChild("title").equalTo(selectedTopic.getTitle());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                deleteNonDefaultComments();
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         for (DataSnapshot comment : dataSnapshot.child("commentList").getChildren()) {
-                            String authorEmail = comment.child("authorEmail").getValue().toString();
-                            String content = comment.child("content").getValue().toString();
+                            String authorEmail = Objects.requireNonNull(comment.child("authorEmail").getValue()).toString();
+                            String content = Objects.requireNonNull(comment.child("content").getValue()).toString();
                             boolean isSolution = (boolean) comment.child("solution").getValue();
                             Comment newComment = new Comment(content, authorEmail, isSolution, false);
                             newComment.setKey(comment.getKey());
@@ -180,16 +205,15 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
                             myAdapter.notifyDataSetChanged();
                         }
                     }
+                    Toast.makeText(getContext(), Constants.COMMENT_LIST_UPDATE_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
-                Toast.makeText(getContext(), Constants.CANCELLED_SPECIFIC_COMMENTS_ADDITION_MESSAGE, Toast.LENGTH_SHORT);
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Toast.makeText(getContext(), Constants.CANCELLED_SPECIFIC_COMMENTS_ADDITION_MESSAGE, Toast.LENGTH_SHORT).show();
             }
-
         });
-
     }
 
     @Override
@@ -208,18 +232,19 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
         Query query = databaseReference.orderByChild("authorEmail").equalTo(selectedTopic.getAuthorEmail());
         String commentKey = comment.getKey();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String title = dataSnapshot.child("title").getValue().toString();
+                        String title = Objects.requireNonNull(dataSnapshot.child("title").getValue()).toString();
                         if (title.equals(selectedTopic.getTitle())) {
                             for (DataSnapshot comment : dataSnapshot.child("commentList").getChildren()) {
                                 if ((boolean) comment.child("solution").getValue()) {
                                     comment.child("solution").getRef().setValue(false);
                                     setFalseSolution(comment.getKey());
                                 }
-                                if (comment.getKey().equals(commentKey)) {
+                                if (Objects.equals(comment.getKey(), commentKey)) {
                                     comment.child("solution").getRef().setValue(true);
                                 }
                             }
@@ -230,7 +255,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Toast.makeText(getContext(), Constants.CANCELLED_COMMENT_SOLUTION_MARKING_MESSAGE, Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), Constants.CANCELLED_COMMENT_SOLUTION_MARKING_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
         comment.setSolution(true);
@@ -254,12 +279,13 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
     private void deleteCommentFromDatabase(Comment comment) {
         Query query = databaseReference.orderByChild("authorEmail").equalTo(selectedTopic.getAuthorEmail());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         for (DataSnapshot commentList : dataSnapshot.child("commentList").getChildren()) {
-                            if (commentList.getKey().equals(comment.getKey())) {
+                            if (Objects.equals(commentList.getKey(), comment.getKey())) {
                                 commentList.getRef().removeValue().addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(getContext(), Constants.SUCCESSFUL_DATABASE_COMMENT_DELETION_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -280,15 +306,13 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
                 Toast.makeText(getContext(), Constants.CANCELLED_DELETION_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
 
     @Override
     public void updateSelectedTopic() {
-        String titleText = ((TextView) recyclerView.findViewHolderForAdapterPosition(0).itemView.findViewById(R.id.topic_title)).getText().toString();
-        String descriptionText = ((TextView) recyclerView.findViewHolderForAdapterPosition(0).itemView.findViewById(R.id.topic_description)).getText().toString();
+        String titleText = ((TextView) Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(0)).itemView.findViewById(R.id.topic_title)).getText().toString();
+        String descriptionText = ((TextView) Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(0)).itemView.findViewById(R.id.topic_description)).getText().toString();
         HashMap hashMap = new HashMap();
         hashMap.put("title", titleText);
         hashMap.put("description", descriptionText);
@@ -298,10 +322,10 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String authorEmail = dataSnapshot.child("authorEmail").getValue().toString();
+                        String authorEmail = Objects.requireNonNull(dataSnapshot.child("authorEmail").getValue()).toString();
                         if (authorEmail.equals(selectedTopic.getAuthorEmail())) {
-                            databaseReference.child(dataSnapshot.getKey()).updateChildren(hashMap).addOnCompleteListener(task -> {
-                                Toast.makeText(getContext(), Constants.SUCCESSFUL_TOPIC_UPDATE_MESSAGE, Toast.LENGTH_SHORT);
+                            databaseReference.child(Objects.requireNonNull(dataSnapshot.getKey())).updateChildren(hashMap).addOnCompleteListener(task -> {
+                                Toast.makeText(getContext(), Constants.SUCCESSFUL_TOPIC_UPDATE_MESSAGE, Toast.LENGTH_SHORT).show();
                                 selectedTopic.setTitle(titleText);
                                 selectedTopic.setDescription(descriptionText);
                             });
@@ -312,9 +336,8 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Toast.makeText(getContext(), Constants.CANCELLED_TOPIC_UPDATE_MESSAGE, Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), Constants.CANCELLED_TOPIC_UPDATE_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }

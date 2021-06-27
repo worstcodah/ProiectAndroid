@@ -1,5 +1,6 @@
 package com.example.tema3.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,14 +34,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ManagementActivity extends AppCompatActivity implements ManagementActivityFragmentCommunication, NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    private TextView email;
     private ArrayList<Element> elementList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +49,17 @@ public class ManagementActivity extends AppCompatActivity implements ManagementA
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-        toolbar = findViewById(R.id.nav_toolbar);
+        Toolbar toolbar = findViewById(R.id.nav_toolbar);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        email = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
+        TextView email = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
         email.setText(getApplicationContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null));
         openManagementFragment();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -90,7 +90,7 @@ public class ManagementActivity extends AppCompatActivity implements ManagementA
                     selectedTopic = (Topic) element;
                 } else {
                     Toast.makeText(getApplicationContext(), Constants.TOO_MANY_TOPICS_SELECTED_MESSAGE, Toast.LENGTH_SHORT).show();
-                    break;
+                    return;
                 }
             }
         }
@@ -122,9 +122,9 @@ public class ManagementActivity extends AppCompatActivity implements ManagementA
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String title = dataSnapshot.child("title").getValue().toString();
+                        String title = Objects.requireNonNull(dataSnapshot.child("title").getValue()).toString();
                         if (title.equals(topic.getTitle())) {
-                            databaseReference.child(dataSnapshot.getKey()).removeValue().addOnCompleteListener(task -> {
+                            databaseReference.child(Objects.requireNonNull(dataSnapshot.getKey())).removeValue().addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), Constants.SUCCESSFUL_DELETION_MESSAGE, Toast.LENGTH_SHORT).show();
                                 } else {
@@ -165,7 +165,6 @@ public class ManagementActivity extends AppCompatActivity implements ManagementA
         FragmentTransaction replaceTransaction = transaction.replace(
                 R.id.management_frame_layout, addTopicFragment, tag
         );
-        replaceTransaction.addToBackStack(null);
         replaceTransaction.commit();
     }
 
@@ -175,11 +174,10 @@ public class ManagementActivity extends AppCompatActivity implements ManagementA
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String tag = SelectedTopicFragment.class.getName();
-        SelectedTopicFragment selectedTopicFragment = new SelectedTopicFragment(topic, true);
+        SelectedTopicFragment selectedTopicFragment = SelectedTopicFragment.newInstance(topic, canEdit);
         FragmentTransaction replaceTransaction = transaction.replace(
                 R.id.management_frame_layout, selectedTopicFragment, tag
         );
-        replaceTransaction.addToBackStack(null);
         replaceTransaction.commit();
     }
 

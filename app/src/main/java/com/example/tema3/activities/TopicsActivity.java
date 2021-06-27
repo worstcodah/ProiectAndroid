@@ -9,12 +9,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tema3.R;
 import com.example.tema3.constants.Constants;
+import com.example.tema3.fragments.AddTopicFragment;
 import com.example.tema3.fragments.SeeTopicsFragment;
 import com.example.tema3.fragments.SelectedTopicFragment;
 import com.example.tema3.interfaces.TopicsActivityFragmentCommunication;
 import com.example.tema3.models.Topic;
 
 public class TopicsActivity extends AppCompatActivity implements TopicsActivityFragmentCommunication {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +43,24 @@ public class TopicsActivity extends AppCompatActivity implements TopicsActivityF
         String tag = SelectedTopicFragment.class.getName();
         boolean isTopicOwner = getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE).getString("email", null)
                 .equals(topic.getAuthorEmail());
-        SelectedTopicFragment selectedTopicFragment = new SelectedTopicFragment(topic, isTopicOwner);
+        SelectedTopicFragment selectedTopicFragment = SelectedTopicFragment.newInstance(topic, isTopicOwner);
         FragmentTransaction replaceTransaction = transaction.replace(
                 R.id.topics_frame_layout, selectedTopicFragment, tag
         );
+        replaceTransaction.addToBackStack(null);
+        replaceTransaction.commit();
+    }
+
+    @Override
+    public void openAddTopicFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        String tag = AddTopicFragment.class.getName();
+        AddTopicFragment addTopicFragment = new AddTopicFragment();
+        FragmentTransaction replaceTransaction = transaction.replace(
+                R.id.topics_frame_layout, addTopicFragment, tag
+        );
+        replaceTransaction.addToBackStack(null);
         replaceTransaction.commit();
     }
 }

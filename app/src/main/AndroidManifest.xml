@@ -9,16 +9,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tema3">
-        <activity android:name=".activities.AuthenticationActivity">
+        <activity
+            android:name=".activities.AuthenticationActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:label="@string/dashboard_activity_name" android:name=".activities.DashboardActivity"/>
-        <activity android:label="@string/topics_activity_name" android:name=".activities.TopicsActivity"/>
-        <activity android:label="@string/management_activity_name" android:name=".activities.ManagementActivity" android:theme="@style/Theme.Tema3.NoActionBar"/>
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/dashboard_activity_name"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name=".activities.TopicsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/topics_activity_name"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name=".activities.ManagementActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/management_activity_name"
+            android:screenOrientation="sensor"
+            android:theme="@style/Theme.Tema3.NoActionBar" />
+
+        <receiver
+            android:name=".services.MyAlarm"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

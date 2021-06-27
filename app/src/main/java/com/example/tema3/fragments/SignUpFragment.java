@@ -20,18 +20,12 @@ import androidx.fragment.app.Fragment;
 import com.example.tema3.R;
 import com.example.tema3.constants.Constants;
 import com.example.tema3.interfaces.AuthenticationActivityFragmentCommunication;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpFragment extends Fragment {
     private EditText emailEt, passwordEt, confirmPasswordEt;
-    private Button signUpButton;
-    private TextView signInTV;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    private View view;
     private AuthenticationActivityFragmentCommunication authenticationActivityFragmentCommunication;
 
     @Override
@@ -45,17 +39,16 @@ public class SignUpFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.sign_up_fragment, container, false);
+        View view = inflater.inflate(R.layout.sign_up_fragment, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
         emailEt = view.findViewById(R.id.email);
         passwordEt = view.findViewById(R.id.password);
         confirmPasswordEt = view.findViewById(R.id.confirm_password);
-        signUpButton = view.findViewById(R.id.sign_up_button);
+        Button signUpButton = view.findViewById(R.id.sign_up_button);
         progressDialog = new ProgressDialog(this.getActivity());
-        signInTV = view.findViewById(R.id.sign_in_tv);
+        TextView signInTV = view.findViewById(R.id.sign_in_tv);
         signUpButton.setOnClickListener(v -> register());
         signInTV.setOnClickListener(v -> authenticationActivityFragmentCommunication.openLoginFragment());
-
         return view;
     }
 
@@ -87,18 +80,15 @@ public class SignUpFragment extends Fragment {
         progressDialog.setMessage(Constants.PROGRESS_DIALOG_MESSAGE);
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this.getActivity(), new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getActivity(), Constants.SUCCESSFUL_REGISTER_MESSAGE, Toast.LENGTH_SHORT).show();
-                    authenticationActivityFragmentCommunication.openLoginFragment();
-                } else {
-                    Toast.makeText(getActivity(), Constants.FAILED_REGISTER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this.requireActivity(), task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getActivity(), Constants.SUCCESSFUL_REGISTER_MESSAGE, Toast.LENGTH_SHORT).show();
+                authenticationActivityFragmentCommunication.openLoginFragment();
+            } else {
+                Toast.makeText(getActivity(), Constants.FAILED_REGISTER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
 
-                }
-                progressDialog.dismiss();
             }
+            progressDialog.dismiss();
         });
     }
 

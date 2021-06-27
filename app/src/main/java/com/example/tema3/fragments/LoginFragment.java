@@ -23,14 +23,12 @@ import com.example.tema3.constants.Constants;
 import com.example.tema3.interfaces.AuthenticationActivityFragmentCommunication;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class LoginFragment extends Fragment {
     private EditText emailEt, passwordEt;
-    private Button loginButton;
-    private TextView signUpTV;
-    private TextView changePasswordTV;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    private View view;
     private AuthenticationActivityFragmentCommunication authenticationActivityFragmentCommunication;
 
     @Override
@@ -44,19 +42,17 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.login_fragment, container, false);
+        View view = inflater.inflate(R.layout.login_fragment, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
         emailEt = view.findViewById(R.id.email);
         passwordEt = view.findViewById(R.id.password);
-        loginButton = view.findViewById(R.id.login_button);
+        Button loginButton = view.findViewById(R.id.login_button);
         progressDialog = new ProgressDialog(this.getActivity());
-        signUpTV = view.findViewById(R.id.sign_up_tv);
-        changePasswordTV = view.findViewById(R.id.forgot_password_tv);
+        TextView signUpTV = view.findViewById(R.id.sign_up_tv);
+        TextView changePasswordTV = view.findViewById(R.id.forgot_password_tv);
         loginButton.setOnClickListener(v -> login());
         signUpTV.setOnClickListener(v -> authenticationActivityFragmentCommunication.openSignUpFragment());
         changePasswordTV.setOnClickListener(v -> authenticationActivityFragmentCommunication.openChangePasswordFragment());
-
-
         return view;
     }
 
@@ -77,12 +73,12 @@ public class LoginFragment extends Fragment {
         progressDialog.setMessage(Constants.PROGRESS_DIALOG_MESSAGE);
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this.getActivity(), task -> {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this.requireActivity(), task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(getActivity(), Constants.SUCCESSFUL_LOGIN_MESSAGE, Toast.LENGTH_SHORT).show();
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = requireContext().getSharedPreferences(Constants.SHARED_PREFERENCES_USER_EMAIL, Context.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString("email", firebaseAuth.getCurrentUser().getEmail());
+                sharedPreferencesEditor.putString("email", Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail());
                 sharedPreferencesEditor.apply();
                 authenticationActivityFragmentCommunication.openDashboardActivity();
             } else {

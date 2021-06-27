@@ -1,6 +1,5 @@
 package com.example.tema3.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -96,10 +95,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class TopicViewHolder extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView description;
-        private TextView authorEmail;
-        private Button updateTopicButton;
+        private final TextView title;
+        private final TextView description;
+        private final TextView authorEmail;
+        private final Button updateTopicButton;
 
         public TopicViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,7 +118,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (onTopicClickListener != null) {
                 itemView.setOnClickListener(v -> onTopicClickListener.openSelectedTopic(topic));
             } else {
-
                 if (canEdit) {
                     title.setOnClickListener(v -> {
                         title.setCursorVisible(true);
@@ -138,7 +136,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     itemView.setOnClickListener(v -> {
                         topic.setSelected(!topic.isSelected());
                         LinearLayout itemLayout = itemView.findViewById(R.id.topic_layout);
-                        itemLayout.setBackgroundColor(topic.isSelected() ? Color.GREEN : Color.GRAY);
+                        itemLayout.setBackgroundColor(topic.isSelected() ? Color.GREEN : Color.parseColor(Constants.DARKER_GRAY_COLOR_CODE));
                     });
                 }
             }
@@ -146,11 +144,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
-        private TextView commentAuthor;
-        private TextView content;
-        private ImageView solutionImage;
-        private Button deleteButton;
-        private Button markSolutionButton;
+        private final TextView commentAuthor;
+        private final TextView content;
+        private final ImageView solutionImage;
+        private final Button deleteButton;
+        private final Button markSolutionButton;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,7 +165,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             solutionImage.setVisibility(comment.isSolution() ? View.VISIBLE : View.GONE);
             deleteButton.setVisibility(canEdit ? View.VISIBLE : View.GONE);
             deleteButton.setOnClickListener(v -> onCommentClickListener.deleteComment(comment));
-            markSolutionButton.setVisibility(comment.isSolution() || comment.isDefault() ? View.GONE : View.VISIBLE);
+            markSolutionButton.setVisibility(comment.isSolution() || comment.isDefault() || !canEdit ? View.GONE : View.VISIBLE);
             markSolutionButton.setOnClickListener(v -> onCommentClickListener.markCommentAsSolution(comment));
         }
     }

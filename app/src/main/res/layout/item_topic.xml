@@ -38,7 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/topic_item_margin_left"
-                android:gravity="center" />
+                android:gravity="center"
+                android:minWidth="@dimen/topic_title_tv_min_width" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,8 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/topic_item_margin_left"
-                android:gravity="center" />
-
+                android:gravity="center"
+                android:minWidth="@dimen/topic_description_tv_min_width" />
 
         </LinearLayout>
     </LinearLayout>

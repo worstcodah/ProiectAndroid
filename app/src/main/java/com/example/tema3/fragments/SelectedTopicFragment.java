@@ -96,7 +96,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
         } catch (InterruptedException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        addTopicComments();
+        addTopicComments(getContext());
         addCommentButton.setOnClickListener(v -> addComment());
         return view;
     }
@@ -186,7 +186,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
         }
     }
 
-    private void addTopicComments() {
+    private void addTopicComments(Context context) {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("topics");
         Query query = databaseReference.orderByChild("title").equalTo(selectedTopic.getTitle());
         query.addValueEventListener(new ValueEventListener() {
@@ -205,7 +205,7 @@ public class SelectedTopicFragment extends Fragment implements OnCommentClickLis
                             myAdapter.notifyDataSetChanged();
                         }
                     }
-                    Toast.makeText(getContext(), Constants.COMMENT_LIST_UPDATE_MESSAGE, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, Constants.COMMENT_LIST_UPDATE_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
             }
 

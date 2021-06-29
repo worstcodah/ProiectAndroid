@@ -47,7 +47,7 @@
     <dimen name="card_image_margin_top">10dp</dimen>
     <dimen name="user_email_tv_margin_left">220dp</dimen>
     <dimen name="user_email_tv_width">150dp</dimen>
-    <dimen name="topic_item_margin_left">40dp</dimen>
+    <dimen name="topic_item_margin_left">25dp</dimen>
     <dimen name="topic_item_width">180dp</dimen>
     <dimen name="topic_item_margin_top">50dp</dimen>
     <dimen name="topic_item_label_margin_left">8dp</dimen>
@@ -95,4 +95,6 @@
     <dimen name="comment_mark_solution_button_margin_top">10dp</dimen>
     <dimen name="see_topics_add_button_height">50dp</dimen>
     <dimen name="see_topics_add_button_width">70dp</dimen>
+    <dimen name="topic_description_tv_min_width">120dp</dimen>
+    <dimen name="topic_title_tv_min_width">100dp</dimen>
 </resources>
